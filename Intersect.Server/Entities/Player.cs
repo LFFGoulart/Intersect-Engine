@@ -1392,7 +1392,8 @@ namespace Intersect.Server.Entities
         {
             return TryGiveItem(item, false, sendUpdate);
         }
-
+        // 19 11 25 //
+        // Nightmare xD My god the irony
         public bool TryGiveItem(Item item, bool bankOverflow, bool sendUpdate)
         {
             var itemBase = ItemBase.Get(item.ItemId);
@@ -1417,7 +1418,7 @@ namespace Intersect.Server.Entities
                         }
 
                         UpdateGatherItemQuests(item.ItemId);
-
+                        PacketSender.SendActionMsg(this, itemBase.Name, CustomColors.Combat.TrueDamage);
                         return true;
                     }
                 }
@@ -1437,7 +1438,7 @@ namespace Intersect.Server.Entities
                     }
 
                     UpdateGatherItemQuests(item.ItemId);
-
+                    PacketSender.SendActionMsg(this, itemBase.Name, CustomColors.Combat.TrueDamage);
                     return true;
                 }
             }
