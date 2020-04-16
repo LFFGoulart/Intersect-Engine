@@ -307,6 +307,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudRange.Value = mEditorItem.StatGrowth;
                 chkBound.Checked = Convert.ToBoolean(mEditorItem.Bound);
                 chkStackable.Checked = Convert.ToBoolean(mEditorItem.Stackable);
+                chkLp.Checked = mEditorItem.LossPrevention;
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
                 RefreshExtendedData();
@@ -1136,6 +1137,10 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void chkLp_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LossPrevention = chkLp.Checked;
+        }
     }
 
 }

@@ -721,6 +721,19 @@ namespace Intersect.Server.Entities
             return classVital;
         }
 
+        public bool IsEquipped(int slot)
+        {
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] == slot)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public override int GetMaxVital(Vitals vital)
         {
             return GetMaxVital((int) vital);
