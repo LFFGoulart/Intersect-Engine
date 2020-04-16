@@ -60,6 +60,8 @@ namespace Intersect.Client.Entities
         public Guid TargetIndex;
 
         public int TargetType;
+		
+		public bool TargetOnFocus;
         
         protected string[] mMyCustomSpriteLayers { get; set; } = new string[(int)Enums.CustomSpriteLayers.CustomCount];
 
@@ -1037,22 +1039,93 @@ namespace Intersect.Client.Entities
             int x = Globals.Me.X;
             int y = Globals.Me.Y;
             var map = Globals.Me.CurrentMap;
+			List<int[]> hitbox = new List<int[]>();
+			//The latest moving direction of the player
             switch (Globals.Me.Dir)
             {
-                case 0:
-                    y--;
+                // Tabulation used to have a sight of the hitbox.
+                 case 0: // Up
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y - 1 }, new int[] { x, y - 1 }, new int[] { x + 1, y - 1 },
+                                new int[] { x - 1, y },                              new int[] { x + 1, y },
+                            });
+                     y--;
+                    
 
-                    break;
-                case 1:
-                    y++;
+                     break;
+                 case 1: // Down
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y },                              new int[] { x + 1, y },
+                                new int[] { x - 1, y + 1 }, new int[] { x, y + 1 }, new int[] { x + 1, y + 1 },
+                            });
+                     y++;
+ 
+                     break;
+                 case 2: // Left
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y - 1 }, new int[] { x, y - 1 },
+                                new int[] { x - 1, y },
+                                new int[] { x - 1, y + 1 }, new int[] { x, y + 1 }
+                            });
+                     x--;
+ 
+                     break;
+                 case 3: // Right
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x, y - 1 }, new int[] { x + 1, y - 1 },
+                                new int[] { x + 1, y },
+                                new int[] { x, y + 1 }, new int[] { x + 1, y + 1 }
+                            });
+                     x++;
+ 
+                     break;
 
-                    break;
-                case 2:
-                    x--;
-
-                    break;
-                case 3:
-                    x++;
+                 case 4: // UpLeft
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y - 1 }, new int[] { x, y - 1 }, new int[] { x + 1, y - 1 },
+                                new int[] { x - 1, y },
+                                new int[] { x - 1, y + 1 }
+                            });
+                     y--;
+                     x--;
+ 
+                     break;
+                 case 5: //UpRight
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y - 1 }, new int[] { x, y - 1 }, new int[] { x + 1, y - 1 },
+                                                                                        new int[] { x + 1, y },
+                                                                                        new int[] { x + 1, y + 1 }
+                            });
+                     y--;
+                     x++;
+ 
+                     break;
+                 case 6: // DownLeft
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                new int[] { x - 1, y - 1 },
+                                new int[] { x - 1, y },
+                                new int[] { x - 1, y + 1 }, new int[] { x, y + 1 }, new int[] { x + 1, y + 1 }
+                            });
+                     y++;
+                     x--;
+ 
+                     break;
+                 case 7: // DownRight
+                    hitbox.AddRange(new List<int[]>
+                            {
+                                                                                    new int[] { x + 1, y - 1 },
+                                                                                    new int[] { x + 1, y },
+                                new int[] { x - 1, y + 1 }, new int[] { x, y + 1 }, new int[] { x + 1, y + 1 }
+                            });
+                     y++;
+                     x++;
 
                     break;
             }
@@ -1069,15 +1142,36 @@ namespace Intersect.Client.Entities
                     if (en.Value != Globals.Me)
                     {
                         if (en.Value.CurrentMap == map &&
-                            en.Value.X == x &&
-                            en.Value.Y == y &&
                             en.Value.CanBeAttacked())
                         {
-                            //ATTACKKKKK!!!
-                            PacketSender.SendAttack(en.Key);
-                            AttackTimer = Globals.System.GetTimeMs() + CalculateAttackTime();
+                            if (TargetIndex != null && TargetOnFocus)
+                            {
+                                bool canAttack = false;
+                                foreach (int[] hitBx in hitbox)
+                                {
+                                    if (hitBx[0] == en.Value.X && hitBx[1] == en.Value.Y)
+                                    {
+                                        canAttack = true;
+                                        break;
+                                    }
+                                }
 
-                            return true;
+                                if (canAttack)
+                                {
+                                    PacketSender.SendAttack(en.Key, TargetOnFocus);
+                                    AttackTimer = Globals.System.GetTimeMs() + CalculateAttackTime();
+
+                                    return true;
+                                }
+                            }
+                            else if (en.Value.X == x && en.Value.Y == y)
+                            {
+                                //ATTACKKKKK!!!
+                                PacketSender.SendAttack(en.Key, TargetOnFocus);
+                                AttackTimer = Globals.System.GetTimeMs() + CalculateAttackTime();
+
+                                return true;
+                            }
                         }
                     }
                 }
@@ -1107,7 +1201,7 @@ namespace Intersect.Client.Entities
             }
 
             //Projectile/empty swing for animations
-            PacketSender.SendAttack(Guid.Empty);
+            PacketSender.SendAttack(Guid.Empty, TargetOnFocus);
             AttackTimer = Globals.System.GetTimeMs() + CalculateAttackTime();
 
             return true;
@@ -1894,9 +1988,11 @@ namespace Intersect.Client.Entities
                 {
                     if (en.Value.GetType() != typeof(Projectile) && en.Value.GetType() != typeof(Resource))
                     {
+                        TargetOnFocus = false;
                         if (TargetType == 0 && TargetIndex == en.Value.Id)
                         {
                             en.Value.DrawTarget((int)TargetTypes.Selected);
+                            TargetOnFocus = true;
                         }
                     }
                 }

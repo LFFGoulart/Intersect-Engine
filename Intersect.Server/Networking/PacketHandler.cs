@@ -736,6 +736,7 @@ namespace Intersect.Server.Networking
 
             var unequippedAttack = false;
             var target = packet.Target;
+            bool targetOnFocus = packet.TargetOnFocus;
 
             if (player.CastTime >= Globals.Timing.TimeMs)
             {
@@ -920,7 +921,7 @@ namespace Intersect.Server.Networking
                 {
                     if (entity.Id == target)
                     {
-                        player.TryAttack(entity);
+                        player.TryAttack(entity, targetOnFocus);
 
                         break;
                     }
