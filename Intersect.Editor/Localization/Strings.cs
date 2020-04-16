@@ -852,6 +852,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString undotitle = @"Undo Changes";
 
+            public static LocalizedString hairstyles = @"Hairstyles";
+
+            public static LocalizedString hair = @"Hair:";
+
         }
 
         public struct Colors
@@ -1168,6 +1172,19 @@ Tick timer saved in server config.json.";
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString title = @"Change Face";
+
+        }
+
+        public struct EventChangeHair
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString label = @"Hair:";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString title = @"Change Hair";
 
         }
 
@@ -1585,6 +1602,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString setface = @"Set Player Face to {00}";
 
+            public static LocalizedString sethair = @"Set Player Hair to {00}";
+
             public static LocalizedString setnamecolor = @"Set Player Name Color";
 
             public static LocalizedString removenamecolor = @"Remove Player Name Color";
@@ -1719,6 +1738,7 @@ Tick timer saved in server config.json.";
                 {"changenamecolor", @"Change Name Color"},
                 {"inputvariable", @"Input Variable"},
                 {"changeplayerlabel", @"Change Player Label"},
+                {"changehair", @"Change Hair"},
             };
 
         }
