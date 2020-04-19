@@ -23,8 +23,17 @@ namespace Intersect.Client
         ///     The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
+
+            // PATCH: Startup Arguments
+            if (args.Length == 0)
+                return;
+            else
+                if (args[0] != "-YourArgument") // command line ex: "Intersect Client.exe" -YourArgument
+                    return;
+            // PATCH: Startup Arguments
+
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CosturaUtility.Initialize();
 
