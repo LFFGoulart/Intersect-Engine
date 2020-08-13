@@ -412,11 +412,7 @@ namespace Intersect.Server.Networking
             if ((canMove == -1 || canMove == -4) && client.Entity.MoveRoute == null)
             {
                 player.Move(packet.Dir, player, false);
-                if (player.MoveTimer > Globals.Timing.TimeMs)
-                {
-                    //TODO: Make this based moreso on the players current ping instead of a flat value that can be abused
-                    player.MoveTimer = Globals.Timing.TimeMs + (long) (player.GetMovementTime() * .75f);
-                }
+                player.MoveTimer = Globals.Timing.TimeMs;
             }
             else
             {
