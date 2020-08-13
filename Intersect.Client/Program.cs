@@ -30,7 +30,7 @@ namespace Intersect.Client
             if (args.Length == 0)
                 return;
             else
-                if (args[0] != "-YourArgument") // command line ex: "Intersect Client.exe" -YourArgument
+                if (args[0] != "-launcher") // command line ex: "Intersect Client.exe" -YourArgument
                     return;
             // PATCH: Startup Arguments
 

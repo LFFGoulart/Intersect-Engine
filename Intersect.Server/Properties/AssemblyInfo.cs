@@ -8,12 +8,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Intersect Server")]
-[assembly: AssemblyDescription("2D ORPG Server - Part of the Intersect Game Creation Suite")]
+[assembly: AssemblyTitle("Urkon Servidor")]
+[assembly: AssemblyDescription("2D ORPG Servidor")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ascension Game Dev")]
-[assembly: AssemblyProduct("Intersect Game Engine")]
-[assembly: AssemblyCopyright("Copyright ©  2020 Ascension Game Dev")]
+[assembly: AssemblyCompany("Equipe Urkoniana")]
+[assembly: AssemblyProduct("Urkon Online Servidor")]
+[assembly: AssemblyCopyright("Copyright ©  2020 Equipe Urkoniana")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyVersion("0.6.2.0")]
-[assembly: AssemblyFileVersion("0.6.2.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
