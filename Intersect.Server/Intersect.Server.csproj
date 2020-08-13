@@ -501,6 +501,10 @@
     <Compile Include="Migrations\Game\20200414015804_AddingMoveRange.designer.cs">
       <DependentUpon>20200414015804_AddingMoveRange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20200416115141_AddingLP.cs" />
+    <Compile Include="Migrations\Game\20200416115141_AddingLP.designer.cs">
+      <DependentUpon>20200416115141_AddingLP.cs</DependentUpon>
+    </Compile>
     <Compile Include="Networking\Client.cs" />
     <Compile Include="Entities\Npc.cs" />
     <Compile Include="Networking\Helpers\NetDebug.cs" />

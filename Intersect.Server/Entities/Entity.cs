@@ -2505,17 +2505,10 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        //Spawning/Dying
-        public virtual void Die(int dropitems = 0, Entity killer = null)
+        bool CheckForLossPrevention()
         {
-            if (Items == null)
+            if (this is Player)
             {
-                return;
-            }
-
-            if (dropitems > 0)
-            {
-                // Drop items
                 for (var n = 0; n < Items.Count; n++)
                 {
                     var item = Items[n];
@@ -2530,36 +2523,87 @@ namespace Intersect.Server.Entities
                         continue;
                     }
 
-                    //Don't lose bound items on death for players.
-                    if (this.GetType() == typeof(Player))
+                    if (itemBase.LossPrevention && itemBase.ItemType != ItemTypes.Equipment)
                     {
-                        if (itemBase.Bound)
+                        ((Player)this).TakeItemsBySlot(n, 1);
+                        return true;
+                        break;
+                    }
+
+                    if (itemBase.LossPrevention && itemBase.ItemType == ItemTypes.Equipment)
+                    {
+                        if (((Player)this).IsEquipped(n))
+                        {
+                            ((Player)this).TakeItemsBySlot(n, 1);
+                            return true;
+                            break;
+                        }
+                    }
+                }
+
+            }               
+            return false;
+        }
+
+        //Spawning/Dying
+        public virtual void Die(int dropitems = 0, Entity killer = null)
+        {
+            if (Items == null)
+            {
+                return;
+            }
+
+            if (dropitems > 0)
+            {
+
+                if (!CheckForLossPrevention())
+                {
+                    // Drop items
+                    for (var n = 0; n < Items.Count; n++)
+                    {
+                        var item = Items[n];
+                        if (item == null)
                         {
                             continue;
                         }
+
+                        var itemBase = ItemBase.Get(item.ItemId);
+                        if (itemBase == null)
+                        {
+                            continue;
+                        }
+
+                        //Don't lose bound items on death for players.
+                        if (this.GetType() == typeof(Player))
+                        {
+                            if (itemBase.Bound)
+                            {
+                                continue;
+                            }
+                        }
+
+                        //Calculate the killers luck (If they are a player)
+                        var playerKiller = killer as Player;
+                        var luck = 1.0 + (playerKiller != null ? playerKiller.GetLuck() : 0) / 100;
+
+                        //Player drop rates
+                        if (Randomization.Next(1, 101) >= dropitems * luck)
+                        {
+                            continue;
+                        }
+
+                        //Npc drop rates
+                        if (Randomization.Next(1, 101) >= item.DropChance * luck)
+                        {
+                            continue;
+                        }
+
+                        var map = MapInstance.Get(MapId);
+                        map?.SpawnItem(X, Y, item, item.Quantity);
+
+                        var player = this as Player;
+                        player?.TakeItemsBySlot(n, item.Quantity);
                     }
-
-                    //Calculate the killers luck (If they are a player)
-                    var playerKiller = killer as Player;
-                    var luck = 1.0 + (playerKiller != null ? playerKiller.GetLuck() : 0) / 100;
-
-                    //Player drop rates
-                    if (Randomization.Next(1, 101) >= dropitems * luck)
-                    {
-                        continue;
-                    }
-
-                    //Npc drop rates
-                    if (Randomization.Next(1, 101) >= item.DropChance * luck)
-                    {
-                        continue;
-                    }
-
-                    var map = MapInstance.Get(MapId);
-                    map?.SpawnItem(X, Y, item, item.Quantity);
-
-                    var player = this as Player;
-                    player?.TakeItemsBySlot(n, item.Quantity);
                 }
             }
 

@@ -180,6 +180,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.chkLp = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldown)).BeginInit();
@@ -317,6 +318,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.chkLp);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
             this.grpGeneral.Controls.Add(this.lblFolder);
             this.grpGeneral.Controls.Add(this.cmbFolder);
@@ -458,10 +460,10 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnEditRequirements
             // 
-            this.btnEditRequirements.Location = new System.Drawing.Point(262, 235);
+            this.btnEditRequirements.Location = new System.Drawing.Point(282, 235);
             this.btnEditRequirements.Name = "btnEditRequirements";
             this.btnEditRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditRequirements.Size = new System.Drawing.Size(171, 23);
+            this.btnEditRequirements.Size = new System.Drawing.Size(151, 23);
             this.btnEditRequirements.TabIndex = 0;
             this.btnEditRequirements.Text = "Edit Usage Requirements";
             this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
@@ -2372,6 +2374,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // chkLp
+            // 
+            this.chkLp.AutoSize = true;
+            this.chkLp.Location = new System.Drawing.Point(168, 239);
+            this.chkLp.Name = "chkLp";
+            this.chkLp.Size = new System.Drawing.Size(108, 17);
+            this.chkLp.TabIndex = 50;
+            this.chkLp.Text = "Loss Prevention?";
+            this.chkLp.CheckedChanged += new System.EventHandler(this.chkLp_CheckedChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2602,5 +2614,6 @@ namespace Intersect.Editor.Forms.Editors
     private Label lblHpRegen;
     private Label lblManaRegen;
     private Label lblRegenHint;
-  }
+        private DarkCheckBox chkLp;
+    }
 }
